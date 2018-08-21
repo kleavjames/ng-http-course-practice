@@ -30,6 +30,8 @@ module.exports = "<div class=\"col-lg-5\">\r\n  <div class=\"well bs-component\"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddBookComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_app_core_data_service__ = __webpack_require__("../../../../../src/app/core/data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -40,15 +42,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var AddBookComponent = (function () {
-    function AddBookComponent() {
+    function AddBookComponent(router, dataService) {
+        this.router = router;
+        this.dataService = dataService;
     }
     AddBookComponent.prototype.ngOnInit = function () { };
     AddBookComponent.prototype.saveBook = function (formValues) {
+        var _this = this;
         var newBook = formValues;
         newBook.bookID = 0;
         console.log(newBook);
-        console.warn('Save new book not yet implemented.');
+        // console.warn('Save new book not yet implemented.');
+        this.dataService.addBook(newBook)
+            .subscribe(function (data) {
+            console.log(data);
+            _this.router.navigate(['/dashboard']);
+        }, function (err) { return console.log(err); });
     };
     AddBookComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -56,7 +68,8 @@ var AddBookComponent = (function () {
             template: __webpack_require__("../../../../../src/app/add-book/add-book.component.html"),
             styles: []
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_2_app_core_data_service__["a" /* DataService */]])
     ], AddBookComponent);
     return AddBookComponent;
 }());
@@ -78,6 +91,8 @@ module.exports = "<div class=\"col-lg-5\">\r\n  <div class=\"well bs-component\"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AddReaderComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__core_data_service__ = __webpack_require__("../../../../../src/app/core/data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -88,15 +103,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var AddReaderComponent = (function () {
-    function AddReaderComponent() {
+    function AddReaderComponent(dataService, router) {
+        this.dataService = dataService;
+        this.router = router;
     }
     AddReaderComponent.prototype.ngOnInit = function () { };
     AddReaderComponent.prototype.saveReader = function (formValues) {
+        var _this = this;
         var newReader = formValues;
         newReader.readerID = 0;
-        console.log(newReader);
-        console.warn('Save new reader not yet implemented.');
+        // console.log(newReader);
+        // console.warn('Save new reader not yet implemented.');
+        this.dataService.addReader(newReader)
+            .subscribe(function (reader) {
+            console.log(reader);
+            _this.router.navigate(['/dashboard']);
+        }, function (err) { return console.log(err); });
     };
     AddReaderComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -104,7 +129,8 @@ var AddReaderComponent = (function () {
             template: __webpack_require__("../../../../../src/app/add-reader/add-reader.component.html"),
             styles: []
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__core_data_service__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]])
     ], AddReaderComponent);
     return AddReaderComponent;
 }());
@@ -151,8 +177,8 @@ var AppRoutingModule = (function () {
     }
     AppRoutingModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */].forRoot(routes)],
-            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */]]
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
         })
     ], AppRoutingModule);
     return AppRoutingModule;
@@ -226,14 +252,15 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("../../../platform-browser/esm5/platform-browser.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__add_book_add_book_component__ = __webpack_require__("../../../../../src/app/add-book/add-book.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__add_reader_add_reader_component__ = __webpack_require__("../../../../../src/app/add-reader/add-reader.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__edit_book_edit_book_component__ = __webpack_require__("../../../../../src/app/edit-book/edit-book.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__edit_reader_edit_reader_component__ = __webpack_require__("../../../../../src/app/edit-reader/edit-reader.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__core_core_module__ = __webpack_require__("../../../../../src/app/core/core.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__add_book_add_book_component__ = __webpack_require__("../../../../../src/app/add-book/add-book.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__add_reader_add_reader_component__ = __webpack_require__("../../../../../src/app/add-reader/add-reader.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__edit_book_edit_book_component__ = __webpack_require__("../../../../../src/app/edit-book/edit-book.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__edit_reader_edit_reader_component__ = __webpack_require__("../../../../../src/app/edit-reader/edit-reader.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__core_core_module__ = __webpack_require__("../../../../../src/app/core/core.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -251,26 +278,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */],
-                __WEBPACK_IMPORTED_MODULE_7__dashboard_dashboard_component__["a" /* DashboardComponent */],
-                __WEBPACK_IMPORTED_MODULE_3__add_book_add_book_component__["a" /* AddBookComponent */],
-                __WEBPACK_IMPORTED_MODULE_9__edit_reader_edit_reader_component__["a" /* EditReaderComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__edit_book_edit_book_component__["a" /* EditBookComponent */],
-                __WEBPACK_IMPORTED_MODULE_4__add_reader_add_reader_component__["a" /* AddReaderComponent */]
+                __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__dashboard_dashboard_component__["a" /* DashboardComponent */],
+                __WEBPACK_IMPORTED_MODULE_4__add_book_add_book_component__["a" /* AddBookComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__edit_reader_edit_reader_component__["a" /* EditReaderComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__edit_book_edit_book_component__["a" /* EditBookComponent */],
+                __WEBPACK_IMPORTED_MODULE_5__add_reader_add_reader_component__["a" /* AddReaderComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_6__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_7__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["a" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_10__core_core_module__["a" /* CoreModule */]
+                __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */],
+                __WEBPACK_IMPORTED_MODULE_11__core_core_module__["a" /* CoreModule */]
             ],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
@@ -382,6 +411,8 @@ var CoreModule = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_app_data__ = __webpack_require__("../../../../../src/app/data.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__logger_service__ = __webpack_require__("../../../../../src/app/core/logger.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operators__ = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -394,29 +425,83 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var DataService = (function () {
-    function DataService(loggerService) {
+    function DataService(loggerService, http) {
         this.loggerService = loggerService;
+        this.http = http;
         this.mostPopularBook = __WEBPACK_IMPORTED_MODULE_1_app_data__["a" /* allBooks */][0];
     }
     DataService.prototype.setMostPopularBook = function (popularBook) {
         this.mostPopularBook = popularBook;
     };
     DataService.prototype.getAllReaders = function () {
-        return __WEBPACK_IMPORTED_MODULE_1_app_data__["b" /* allReaders */];
+        return this.http.get("/api/readers");
+        // return allReaders;
     };
     DataService.prototype.getReaderById = function (id) {
-        return __WEBPACK_IMPORTED_MODULE_1_app_data__["b" /* allReaders */].find(function (reader) { return reader.readerID === id; });
+        return this.http.get("/api/readers/" + id);
+        // return allReaders.find(reader => reader.readerID === id);
+    };
+    DataService.prototype.addReader = function (newReader) {
+        return this.http.post("/api/readers", newReader, {
+            headers: new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpHeaders */]({
+                'Content-Type': 'application/json'
+            })
+        });
+    };
+    DataService.prototype.updateReader = function (updatedReader) {
+        return this.http.put("/api/readers/" + updatedReader.readerID, updatedReader, {
+            headers: new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpHeaders */]({
+                'Content-Type': 'application/json'
+            })
+        });
+    };
+    DataService.prototype.deleteReader = function (readerID) {
+        return this.http.delete("/api/readers/" + readerID);
     };
     DataService.prototype.getAllBooks = function () {
-        return __WEBPACK_IMPORTED_MODULE_1_app_data__["a" /* allBooks */];
+        return this.http.get("/api/books");
+        // return allBooks;
     };
     DataService.prototype.getBookById = function (id) {
-        return __WEBPACK_IMPORTED_MODULE_1_app_data__["a" /* allBooks */].find(function (book) { return book.bookID === id; });
+        return this.http.get("/api/books/" + id, {
+            headers: new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpHeaders */]({
+                'Accept': 'application/json',
+                'Authorization': 'my-token'
+            })
+        });
+        // return allBooks.find(book => book.bookID === id);
+    };
+    DataService.prototype.getOldBookById = function (id) {
+        return this.http.get("/api/books/" + id)
+            .pipe(Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_operators__["a" /* map */])(function (book) { return ({
+            bookTitle: book.title,
+            year: book.publicationYear
+        }); }), Object(__WEBPACK_IMPORTED_MODULE_4_rxjs_operators__["b" /* tap */])(function (classicBook) { return console.log(classicBook); }));
+    };
+    DataService.prototype.addBook = function (newBook) {
+        return this.http.post("/api/books", newBook, {
+            headers: new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpHeaders */]({
+                'Content-Type': 'application/json'
+            })
+        });
+    };
+    DataService.prototype.updateBook = function (updatedBook) {
+        return this.http.put("/api/books/" + updatedBook.bookID, updatedBook, {
+            headers: new __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["c" /* HttpHeaders */]({
+                'Content-Type': 'application/json'
+            })
+        });
+    };
+    DataService.prototype.deleteBook = function (bookID) {
+        return this.http.delete("/api/books/" + bookID);
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__logger_service__["a" /* LoggerService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__logger_service__["a" /* LoggerService */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HttpClient */]])
     ], DataService);
     return DataService;
 }());
@@ -505,16 +590,33 @@ var DashboardComponent = (function () {
         this.title = title;
     }
     DashboardComponent.prototype.ngOnInit = function () {
-        this.allBooks = this.dataService.getAllBooks();
-        this.allReaders = this.dataService.getAllReaders();
+        var _this = this;
+        // this.allBooks = this.dataService.getAllBooks();
+        this.dataService.getAllBooks()
+            .subscribe(function (data) { return _this.allBooks = data; }, function (err) { return console.log(err); });
+        // this.allReaders = this.dataService.getAllReaders();
+        this.dataService.getAllReaders()
+            .subscribe(function (readers) { return _this.allReaders = readers; }, function (err) { return console.log(err); });
         this.mostPopularBook = this.dataService.mostPopularBook;
         this.title.setTitle("Book Tracker " + __WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* VERSION */].full);
     };
     DashboardComponent.prototype.deleteBook = function (bookID) {
-        console.warn("Delete book not yet implemented (bookID: " + bookID + ").");
+        var _this = this;
+        // console.warn(`Delete book not yet implemented (bookID: ${bookID}).`);
+        this.dataService.deleteBook(bookID)
+            .subscribe(function () {
+            var index = _this.allBooks.findIndex(function (book) { return book.bookID === bookID; });
+            _this.allBooks.splice(index, 1);
+        }, function (err) { return console.log(err); });
     };
     DashboardComponent.prototype.deleteReader = function (readerID) {
-        console.warn("Delete reader not yet implemented (readerID: " + readerID + ").");
+        var _this = this;
+        this.dataService.deleteReader(readerID)
+            .subscribe(function () {
+            var index = _this.allReaders.findIndex(function (reader) { return reader.readerID === readerID; });
+            _this.allReaders.splice(index, 1);
+        }, function (err) { return console.log(err); });
+        // console.warn(`Delete reader not yet implemented (readerID: ${readerID}).`);
     };
     DashboardComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -536,7 +638,7 @@ var DashboardComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return allReaders; });
+/* unused harmony export allReaders */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return allBooks; });
 var allReaders = [
     { readerID: 1, name: 'Marie', weeklyReadingGoal: 400, totalMinutesRead: 5600 },
@@ -583,19 +685,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var EditBookComponent = (function () {
-    function EditBookComponent(route, dataService) {
+    function EditBookComponent(router, route, dataService) {
+        this.router = router;
         this.route = route;
         this.dataService = dataService;
     }
     EditBookComponent.prototype.ngOnInit = function () {
-        var bookID = parseInt(this.route.snapshot.params['id']);
-        this.selectedBook = this.dataService.getBookById(bookID);
+        var _this = this;
+        var bookID = parseInt(this.route.snapshot.params['id'], 16); // 16 radix (hexadecimal)
+        // this.selectedBook = this.dataService.getBookById(bookID);
+        this.dataService.getBookById(bookID)
+            .subscribe(function (data) { return _this.selectedBook = data; }, function (err) { return console.log(err); });
+        this.dataService.getOldBookById(bookID)
+            .subscribe(function (book) { return console.log('Oldbook: ', book); });
     };
     EditBookComponent.prototype.setMostPopular = function () {
         this.dataService.setMostPopularBook(this.selectedBook);
     };
     EditBookComponent.prototype.saveChanges = function () {
-        console.warn('Save changes to book not yet implemented.');
+        var _this = this;
+        this.dataService.updateBook(this.selectedBook)
+            .subscribe(function () {
+            console.log(_this.selectedBook.title + " updated successfully.");
+            _this.router.navigate(['/dashboard']);
+        }, function (err) { return console.log(err); });
+        // console.warn('Save changes to book not yet implemented.');
     };
     EditBookComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -603,7 +717,8 @@ var EditBookComponent = (function () {
             template: __webpack_require__("../../../../../src/app/edit-book/edit-book.component.html"),
             styles: []
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
             __WEBPACK_IMPORTED_MODULE_2_app_core_data_service__["a" /* DataService */]])
     ], EditBookComponent);
     return EditBookComponent;
@@ -616,7 +731,7 @@ var EditBookComponent = (function () {
 /***/ "../../../../../src/app/edit-reader/edit-reader.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"col-lg-5\">\r\n  <div class=\"well bs-component\">\r\n    <form class=\"form-horizontal\">\r\n      <fieldset>\r\n        <legend>Edit Reader</legend>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputGoal\" class=\"col-lg-3 control-label\">Name</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputGoal\" placeholder=\"Name\" [(ngModel)]=\"selectedReader && selectedReader.name\" name=\"name\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputGoal\" class=\"col-lg-3 control-label\">Weekly Goal</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputGoal\" placeholder=\"Weekly Goal\" [(ngModel)]=\"selectedReader && selectedReader.weeklyReadingGoal\" name=\"weeklyReaddingGoal\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputTotal\" class=\"col-lg-3 control-label\">Total Read</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputTotal\" placeholder=\"Total Minutes Read\" [(ngModel)]=\"selectedReader && selectedReader.totalMinutesRead\" name=\"totalMinutesRead\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n          <label for=\"inputTotal\" class=\"col-lg-3 control-label\">Current Badge</label>\r\n          <div class=\"col-lg-8\">\r\n            {{ currentBadge }}\r\n          </div>\r\n        </div>\r\n\r\n\r\n        <div class=\"form-group\">\r\n          <div class=\"col-lg-10 col-lg-offset-3\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveChanges()\">Save</button>\r\n          </div>\r\n        </div>\r\n      </fieldset>\r\n    </form>\r\n  </div>\r\n</div>"
+module.exports = "<div class=\"col-lg-5\">\r\n  <div class=\"well bs-component\">\r\n    <form class=\"form-horizontal\">\r\n      <fieldset>\r\n        <legend>Edit Reader</legend>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputGoal\" class=\"col-lg-3 control-label\">Name</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputGoal\" placeholder=\"Name\" [(ngModel)]=\"selectedReader && selectedReader.name\" name=\"name\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputGoal\" class=\"col-lg-3 control-label\">Weekly Goal</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputGoal\" placeholder=\"Weekly Goal\" [(ngModel)]=\"selectedReader && selectedReader.weeklyReadingGoal\" name=\"weeklyReaddingGoal\">\r\n          </div>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"inputTotal\" class=\"col-lg-3 control-label\">Total Read</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control\" id=\"inputTotal\" placeholder=\"Total Minutes Read\" [(ngModel)]=\"selectedReader && selectedReader.totalMinutesRead\" name=\"totalMinutesRead\">\r\n          </div>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n          <label for=\"inputTotal\" class=\"col-lg-3 control-label\">Current Badge</label>\r\n          <div class=\"col-lg-8\">\r\n            <input type=\"text\" class=\"form-control current-badge\" [value]=\"currentBadge\" disabled>\r\n          </div>\r\n        </div>\r\n\r\n\r\n        <div class=\"form-group\">\r\n          <div class=\"col-lg-10 col-lg-offset-3\">\r\n            <button type=\"button\" class=\"btn btn-primary\" (click)=\"saveChanges()\">Save</button>\r\n          </div>\r\n        </div>\r\n      </fieldset>\r\n    </form>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -643,27 +758,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var EditReaderComponent = (function () {
-    function EditReaderComponent(route, dataService, badgeService) {
+    function EditReaderComponent(route, router, dataService, badgeService) {
         this.route = route;
+        this.router = router;
         this.dataService = dataService;
         this.badgeService = badgeService;
     }
     EditReaderComponent.prototype.ngOnInit = function () {
-        var readerID = parseInt(this.route.snapshot.params['id']);
-        this.selectedReader = this.dataService.getReaderById(readerID);
-        this.currentBadge = this.badgeService.getReaderBadge(this.selectedReader.totalMinutesRead);
+        var _this = this;
+        var readerID = parseInt(this.route.snapshot.params['id'], 16);
+        this.dataService.getReaderById(readerID)
+            .subscribe(function (reader) {
+            _this.selectedReader = reader;
+            _this.currentBadge = _this.badgeService.getReaderBadge(_this.selectedReader.totalMinutesRead);
+        }, function (err) { return console.log(err); });
+        // this.selectedReader = this.dataService.getReaderById(readerID);
     };
     EditReaderComponent.prototype.saveChanges = function () {
-        console.warn('Save reader not yet implemented.');
+        var _this = this;
+        this.dataService.updateReader(this.selectedReader)
+            .subscribe(function () {
+            console.log(_this.selectedReader.name + " updated successfully.");
+            _this.router.navigate(['/dashboard']);
+        }, function (err) { return console.log(err); });
+        // console.warn('Save reader not yet implemented.');
     };
     EditReaderComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-edit-reader',
             template: __webpack_require__("../../../../../src/app/edit-reader/edit-reader.component.html"),
-            styles: [],
+            styles: ["\n    .current-badge {\n      border: none;\n      background-color: #f5f5f5;\n      box-shadow: none;\n      padding-left: 0;\n    }\n  "],
             providers: [__WEBPACK_IMPORTED_MODULE_3_app_services_badge_service__["a" /* BadgeService */]]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */],
             __WEBPACK_IMPORTED_MODULE_2_app_core_data_service__["a" /* DataService */],
             __WEBPACK_IMPORTED_MODULE_3_app_services_badge_service__["a" /* BadgeService */]])
     ], EditReaderComponent);

@@ -9,14 +9,11 @@ export class BadgeService {
 
     if (minutesRead > 5000) {
       return 'Book Worm';
-    }
-    else if (minutesRead > 2500) {
+    } else if (minutesRead > 2500) {
       return 'Page Turner';
-    }
-    else {
+    } else {
       return 'Getting Started';
     }
-    
   }
 
 }

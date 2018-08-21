@@ -2,34 +2,100 @@ import { Injectable } from '@angular/core';
 
 import { allBooks, allReaders } from 'app/data';
 import { LoggerService } from './logger.service';
-import { Reader } from "app/models/reader";
-import { Book } from "app/models/book";
+import { Reader } from 'app/models/reader';
+import { Book } from 'app/models/book';
 import { BookTrackerError } from 'app/models/bookTrackerError';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { OldBook } from '../models/oldBook';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class DataService {
-
-  constructor(private loggerService: LoggerService) { }
-
   mostPopularBook: Book = allBooks[0];
+
+  constructor(
+    private loggerService: LoggerService,
+    private http: HttpClient
+  ) { }
 
   setMostPopularBook(popularBook: Book): void {
     this.mostPopularBook = popularBook;
   }
 
-  getAllReaders(): Reader[] {
-    return allReaders;
+  getAllReaders(): Observable<Reader[]> {
+    return this.http.get<Reader[]>(`/api/readers`);
+    // return allReaders;
   }
 
-  getReaderById(id: number): Reader {
-    return allReaders.find(reader => reader.readerID === id);
+  getReaderById(id: number): Observable<Reader> {
+    return this.http.get<Reader>(`/api/readers/${id}`);
+    // return allReaders.find(reader => reader.readerID === id);
   }
 
-  getAllBooks(): Book[] {
-    return allBooks;
+  addReader(newReader: Reader): Observable<Reader> {
+    return this.http.post<Reader>(`/api/readers`, newReader, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    })
   }
 
-  getBookById(id: number): Book {
-    return allBooks.find(book => book.bookID === id);
-  }  
+  updateReader(updatedReader: Reader): Observable<void> {
+    return this.http.put<void>(`/api/readers/${updatedReader.readerID}`, updatedReader, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    })
+  }
+
+  deleteReader(readerID: number): Observable<void> {
+    return this.http.delete<void>(`/api/readers/${readerID}`);
+  }
+
+  getAllBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(`/api/books`);
+    // return allBooks;
+  }
+
+  getBookById(id: number): Observable<Book> {
+    return this.http.get<Book>(`/api/books/${id}`, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': 'my-token'
+      })
+    });
+    // return allBooks.find(book => book.bookID === id);
+  }
+
+  getOldBookById(id: number): Observable<OldBook> {
+    return this.http.get<Book>(`/api/books/${id}`)
+      .pipe(
+        map(book => <OldBook>{
+          bookTitle: book.title,
+          year: book.publicationYear
+        }),
+        tap(classicBook => console.log(classicBook))
+      );
+  }
+
+  addBook(newBook: Book): Observable<Book> {
+    return this.http.post<Book>(`/api/books`, newBook, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  updateBook(updatedBook: Book): Observable<void> {
+    return this.http.put<void>(`/api/books/${updatedBook.bookID}`, updatedBook, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  deleteBook(bookID: number): Observable<void> {
+    return this.http.delete<void>(`/api/books/${bookID}`);
+  }
 }
