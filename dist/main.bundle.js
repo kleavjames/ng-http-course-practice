@@ -431,21 +431,87 @@ var BooksResolverService = (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/core/cache.interceptor.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CacheInterceptor; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__("../../../../rxjs/_esm5/observable/of.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operators__ = __webpack_require__("../../../../rxjs/_esm5/operators/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__http_cache_service__ = __webpack_require__("../../../../../src/app/core/http-cache.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var CacheInterceptor = (function () {
+    function CacheInterceptor(cacheService) {
+        this.cacheService = cacheService;
+    }
+    CacheInterceptor.prototype.intercept = function (req, next) {
+        var _this = this;
+        // pass along non-cacheable requests and invalidates the cache
+        if (req.method !== 'GET') {
+            console.log("Invalidating cache: " + req.method + "-" + req.url);
+            this.cacheService.invalidateCache();
+            return next.handle(req);
+        }
+        // attempt to retrieve a cached response
+        var cachedResponse = this.cacheService.get(req.url);
+        // return cached response
+        if (cachedResponse) {
+            console.log("Returning a cached response: " + cachedResponse.url);
+            console.log(cachedResponse);
+            return Object(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["a" /* of */])(cachedResponse);
+        }
+        // send request to server and add response to cache
+        return next.handle(req)
+            .pipe(Object(__WEBPACK_IMPORTED_MODULE_3_rxjs_operators__["c" /* tap */])(function (event) {
+            if (event instanceof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["e" /* HttpResponse */]) {
+                console.log("Adding item to cache: " + req.url);
+                _this.cacheService.put(req.url, event);
+            }
+        }));
+    };
+    CacheInterceptor = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__http_cache_service__["a" /* HttpCacheService */]])
+    ], CacheInterceptor);
+    return CacheInterceptor;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/core/core.module.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CoreModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__logger_service__ = __webpack_require__("../../../../../src/app/core/logger.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__data_service__ = __webpack_require__("../../../../../src/app/core/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_app_core_module_import_guard__ = __webpack_require__("../../../../../src/app/core/module-import-guard.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__books_resolver_service__ = __webpack_require__("../../../../../src/app/core/books-resolver.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__book_tracker_error_handler_service__ = __webpack_require__("../../../../../src/app/core/book-tracker-error-handler.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__add_header_interceptor__ = __webpack_require__("../../../../../src/app/core/add-header.interceptor.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__log_response_interceptor__ = __webpack_require__("../../../../../src/app/core/log-response.interceptor.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cache_interceptor__ = __webpack_require__("../../../../../src/app/core/cache.interceptor.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__logger_service__ = __webpack_require__("../../../../../src/app/core/logger.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__data_service__ = __webpack_require__("../../../../../src/app/core/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_app_core_module_import_guard__ = __webpack_require__("../../../../../src/app/core/module-import-guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__books_resolver_service__ = __webpack_require__("../../../../../src/app/core/books-resolver.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__book_tracker_error_handler_service__ = __webpack_require__("../../../../../src/app/core/book-tracker-error-handler.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__add_header_interceptor__ = __webpack_require__("../../../../../src/app/core/add-header.interceptor.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__log_response_interceptor__ = __webpack_require__("../../../../../src/app/core/log-response.interceptor.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__http_cache_service__ = __webpack_require__("../../../../../src/app/core/http-cache.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -468,26 +534,30 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 
 
 
+
+
 var CoreModule = (function () {
     function CoreModule(parentModule) {
-        Object(__WEBPACK_IMPORTED_MODULE_5_app_core_module_import_guard__["a" /* throwIfAlreadyLoaded */])(parentModule, 'CoreModule');
+        Object(__WEBPACK_IMPORTED_MODULE_6_app_core_module_import_guard__["a" /* throwIfAlreadyLoaded */])(parentModule, 'CoreModule');
     }
     CoreModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["I" /* NgModule */])({
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */]
+                __WEBPACK_IMPORTED_MODULE_2__angular_common__["b" /* CommonModule */]
             ],
             declarations: [],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_3__logger_service__["a" /* LoggerService */],
-                __WEBPACK_IMPORTED_MODULE_4__data_service__["a" /* DataService */],
-                { provide: __WEBPACK_IMPORTED_MODULE_0__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_7__book_tracker_error_handler_service__["a" /* BookTrackerErrorHandlerService */] },
-                __WEBPACK_IMPORTED_MODULE_6__books_resolver_service__["a" /* BooksResolverService */],
-                { provide: __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_8__add_header_interceptor__["a" /* AddHeaderInterceptor */], multi: true },
-                { provide: __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_9__log_response_interceptor__["a" /* LogResponseInterceptor */], multi: true }
+                __WEBPACK_IMPORTED_MODULE_4__logger_service__["a" /* LoggerService */],
+                __WEBPACK_IMPORTED_MODULE_5__data_service__["a" /* DataService */],
+                { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_8__book_tracker_error_handler_service__["a" /* BookTrackerErrorHandlerService */] },
+                __WEBPACK_IMPORTED_MODULE_7__books_resolver_service__["a" /* BooksResolverService */],
+                { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_9__add_header_interceptor__["a" /* AddHeaderInterceptor */], multi: true },
+                { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_10__log_response_interceptor__["a" /* LogResponseInterceptor */], multi: true },
+                __WEBPACK_IMPORTED_MODULE_11__http_cache_service__["a" /* HttpCacheService */],
+                { provide: __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["a" /* HTTP_INTERCEPTORS */], useClass: __WEBPACK_IMPORTED_MODULE_0__cache_interceptor__["a" /* CacheInterceptor */], multi: true },
             ]
         }),
-        __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Optional */])()), __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_2" /* SkipSelf */])()),
+        __param(0, Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["O" /* Optional */])()), __param(0, Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_2" /* SkipSelf */])()),
         __metadata("design:paramtypes", [CoreModule])
     ], CoreModule);
     return CoreModule;
@@ -591,6 +661,49 @@ var DataService = (function () {
             __WEBPACK_IMPORTED_MODULE_4__angular_common_http__["b" /* HttpClient */]])
     ], DataService);
     return DataService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/core/http-cache.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HttpCacheService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var HttpCacheService = (function () {
+    function HttpCacheService() {
+        this.requests = {};
+    }
+    HttpCacheService.prototype.put = function (url, response) {
+        this.requests[url] = response;
+    };
+    HttpCacheService.prototype.get = function (url) {
+        return this.requests[url];
+    };
+    HttpCacheService.prototype.invalidateUrl = function (url) {
+        this.requests[url] = undefined;
+    };
+    HttpCacheService.prototype.invalidateCache = function () {
+        this.requests = {};
+    };
+    HttpCacheService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [])
+    ], HttpCacheService);
+    return HttpCacheService;
 }());
 
 

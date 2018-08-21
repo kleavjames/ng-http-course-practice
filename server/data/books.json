@@ -34,5 +34,11 @@
         "title": "Alice's Adventures in Wonderland",
         "author": "Lewis Carroll",
         "publicationYear": "1865"
+    },
+    {
+        "bookID": 7,
+        "title": "Harvest is Plentiful",
+        "author": "Margaret Wise Brown",
+        "publicationYear": "2018"
     }
 ]
