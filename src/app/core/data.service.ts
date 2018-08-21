@@ -5,10 +5,11 @@ import { LoggerService } from './logger.service';
 import { Reader } from 'app/models/reader';
 import { Book } from 'app/models/book';
 import { BookTrackerError } from 'app/models/bookTrackerError';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { OldBook } from '../models/oldBook';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class DataService {
@@ -53,8 +54,12 @@ export class DataService {
     return this.http.delete<void>(`/api/readers/${readerID}`);
   }
 
-  getAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(`/api/books`);
+  getAllBooks(): Observable<Book[] | BookTrackerError> {
+    // return this.http.get<Book[]>(`/api/books`);
+    return this.http.get<Book[]>(`/api/books`)
+      .pipe(
+        catchError(err => this.handleHttpError(err))
+      );
     // return allBooks;
   }
 
@@ -97,5 +102,13 @@ export class DataService {
 
   deleteBook(bookID: number): Observable<void> {
     return this.http.delete<void>(`/api/books/${bookID}`);
+  }
+
+  private handleHttpError(error: HttpErrorResponse): Observable<BookTrackerError> {
+    const dataError = new BookTrackerError();
+    dataError.errorNumber = 100;
+    dataError.message = error.statusText;
+    dataError.friendlyMessage = 'An error occured retrieving data.';
+    return ErrorObservable.create(dataError);
   }
 }
